@@ -12,11 +12,18 @@ int main(int argc, char* argv[])
     }
 
     Boggle b(argv[1], argv[2]);
-    b.printTouchLists();
+    //b.printTouchLists();
 
     std::string cube("eqeffvxnhnalxvqbcaypicpvxtacesqgcyrnrygmmzhvxcvrdsutfwawokdqsyrs");
+    b.setLoadedCube(cube);
+
     std::string word("efvx");
-    b.findWord(word, cube);
+    b.setWord(word);
+
+    bool found = b.findWord();
+    cout << "found: " << found << endl;
+
+    b.printPaths();
 
     return 0;
 }

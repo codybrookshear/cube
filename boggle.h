@@ -11,22 +11,36 @@ class Boggle
 public:
     Boggle(char *cubeFile, char *wordFile );
 
-    void printTouchLists();
+    void printTouchLists(); // debug
 
-    void printTouchList(int c);
+    void printTouchList(int c); // debug
 
-    bool findWord(std::string& word, std::string& loadedCube);
+    void printPaths(); // debug
+
+    void setLoadedCube(std::string& cube);
+
+    void setWord(std::string& word);
+
+    bool findWord();
 
     static const int cubieCnt = 64;
 
 private:
     void initCubbies(int plane);
 
-    bool followWordPaths(std::string &word, std::string &loadedCube);
+    bool followWordPaths();
+
+    bool addPaths(Path &p, char c);
+
+    void removePathsShorterThan(int length);
 
     Cubie cubies[cubieCnt];
 
     std::vector<Path> paths;
+
+    std::string loadedCube;
+
+    std::string word;
 };
 
 #endif // BOGGLE_H

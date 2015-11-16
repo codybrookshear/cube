@@ -3,6 +3,8 @@
 
 #include <vector>
 
+typedef std::vector<int> TouchList;
+
 class Cubie
 {
 
@@ -11,12 +13,12 @@ public:
 
     void init(int cubie, std::vector<int>& simpleList);
 
-    const std::vector<int>& getTouchList();
+    const TouchList& getTouchList();
 
 private:
     void addPlane(int plane, const std::vector<int>& simpleList);
 
-    std::vector<int> touchList;
+    TouchList touchList;
 };
 
 #endif // CUBIE_H

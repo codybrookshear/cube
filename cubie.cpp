@@ -66,7 +66,7 @@ void Cubie::init(int cubie, std::vector<int> &simpleList)
 
 }
 
-const std::vector<int>& Cubie::getTouchList()
+const TouchList &Cubie::getTouchList()
 {
     return touchList;
 }

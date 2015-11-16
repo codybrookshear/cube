@@ -1,10 +1,11 @@
 #include "boggle.h"
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 Boggle::Boggle(char *cubeFile, char *wordFile)
-    : cubies()
+    : cubies(), loadedCube(), word()
 {
     for (int plane = 0; plane < 4; plane++)
     {
@@ -25,16 +26,46 @@ void Boggle::printTouchLists()
 void Boggle::printTouchList(int c)
 {
     cout << c << ": ";
-    const vector<int>& list = cubies[c].getTouchList();
+    const TouchList& list = cubies[c].getTouchList();
 
-    for (vector<int>::const_iterator it = list.begin() ; it != list.end(); ++it)
+    for (TouchList::const_iterator it = list.begin() ; it != list.end(); ++it)
         cout << *it << ", ";
 
     cout << endl;
 }
 
-bool Boggle::findWord(string &word, string &loadedCube)
+void Boggle::printPaths()
 {
+    for (vector<Path>::iterator it = paths.begin() ; it != paths.end(); ++it)
+    {
+        cout << "Path ";
+
+        for (int i = 0; i < (*it).size(); i++)
+        {
+            cout << (*it)[i] << "(" << word[i] << "), ";
+        }
+        cout << endl;
+    }
+}
+
+void Boggle::setLoadedCube(string &cube)
+{
+    loadedCube = cube;
+}
+
+void Boggle::setWord(string &word)
+{
+    this->word = word;
+}
+
+bool Boggle::findWord()
+{
+    // clear all paths from previous iterations out
+    for (vector<Path>::iterator it = paths.begin() ; it != paths.end(); )
+    {
+        it = paths.erase(it);
+    }
+
     // add a path for any that matches the first letter of the word
 
     for (int i = 0; i < cubieCnt; i++)
@@ -42,7 +73,7 @@ bool Boggle::findWord(string &word, string &loadedCube)
         // find first char in cube matching word[0]
         if (loadedCube[i] == word[0])
         {
-            std::vector<int> temp;
+            Path temp;
             temp.push_back(i);
             paths.push_back(temp);
         }
@@ -54,26 +85,96 @@ bool Boggle::findWord(string &word, string &loadedCube)
     }
     else
     {
-        return followWordPaths(word, loadedCube);
+        return followWordPaths();
     }
 }
 
-bool Boggle::followWordPaths(string &word, string &loadedCube)
+bool Boggle::followWordPaths()
 {
     // for each letter in word
-    for (int i = 0; i < word.size(); i++)
+    int wordSize = word.size();
+
+    for (int i = 1; i < wordSize; i++)
     {
-        for (vector<Path>::iterator p = paths.begin() ; p != paths.end(); ++p)
+        for (vector<Path>::iterator it = paths.begin() ; it != paths.end(); ++it)
         {
-            cout << "last: " << (*p).back();
+            if ((*it).size() == i)
+            {
+                // paths could have expanded on us in a previous iteration,
+                // so only call addPaths if current path size is as expected
+
+                addPaths((*it), word[i]);
+            }
         }
-        cout << endl;
+
+        // remove paths that didn't get added to in for loop (didn't "make the cut")
+        removePathsShorterThan(i+1);
     }
 
-    // TODO clear all paths out
+    // if we make it here and there are any paths remaining, that means we found
+    // the word!
+    if (paths.size() > 0)
+         return true;
+
     return false;
 }
 
+bool Boggle::addPaths(Path &p, char c)
+{
+    // add any cubies that the last cubie in the path says we can get to and
+    // that match character c
+
+    bool firstTime = true;
+
+    const TouchList& touchList = cubies[p.back()].getTouchList();
+
+    TouchList::const_iterator it = touchList.begin();
+
+    // go through the list of all cubies that the one at the end of our path
+    // touches
+    for(; it != touchList.end(); ++it)
+    {
+        if ( std::find(p.begin(), p.end(), (*it)) == p.end() )
+        {
+            // the cubie is not already on our path (a single cubie can only be
+            // used once on a given path)
+
+            if (loadedCube[(*it)] == c)
+            {
+                // this path made the cut! it touches the next req'd char
+
+                if (firstTime)
+                {
+                    // first match, so just add cubie to our existing path
+                    p.push_back(*it);
+                    firstTime = false;
+                }
+                else
+                {
+                    // we already found one path and added to it. in this case,
+                    // we duplicate the existing path and change the last element
+                    // and then add it to paths.
+                    Path newPath(p);
+                    newPath[newPath.size()-1] = (*it);
+                    paths.push_back(newPath);
+                }
+            }
+        }
+    }
+
+    return (!firstTime);  // will return true if we added to atleast one word
+}
+
+void Boggle::removePathsShorterThan(int length)
+{
+    for (vector<Path>::iterator it = paths.begin() ; it != paths.end(); )
+    {
+        if ((*it).size() < length)
+            it = paths.erase(it);
+        else
+            ++it;
+    }
+}
 
 void Boggle::initCubbies(int plane)
 {
