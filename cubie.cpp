@@ -14,7 +14,6 @@ Cubie::Cubie()
 void Cubie::init(int cubie, std::vector<int> &simpleList)
 {
     int plane = cubie / 16;
-    cout << "init plane " << plane << " cubie " << cubie << endl;
 
     if (plane == 0)
     {
@@ -57,12 +56,12 @@ void Cubie::init(int cubie, std::vector<int> &simpleList)
     else // plane 3
     {
         // for plane 3, we get what's in list 2x, plane 2 and 3
-        addPlane(3, simpleList);
+        addPlane(2, simpleList);
 
         // we can reach square directoy above us
         touchList.push_back(cubie - 16);
 
-        addPlane(4, simpleList);
+        addPlane(3, simpleList);
     }
 
 }
