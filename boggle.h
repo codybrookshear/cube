@@ -11,6 +11,11 @@ class Boggle
 public:
     Boggle(char *cubeFile, char *wordFile );
 
+    void run();  // read from files, run the program
+
+    // everything below should probably be private
+    // but keeping public for debugging flexibility from outside class
+
     void printTouchLists(); // debug
 
     void printTouchList(int c); // debug
@@ -32,7 +37,11 @@ private:
 
     bool addPaths(Path &p, char c);
 
-    void removePathsShorterThan(int length);
+    void removePathsShorterThan(unsigned int length);
+
+    std::ifstream cubeFile;
+
+    std::ifstream wordFile;
 
     Cubie cubies[cubieCnt];
 

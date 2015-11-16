@@ -5,11 +5,41 @@
 using namespace std;
 
 Boggle::Boggle(char *cubeFile, char *wordFile)
-    : cubies(), loadedCube(), word()
+    : cubeFile(cubeFile),
+      wordFile(wordFile),
+      cubies(),
+      loadedCube(),
+      word()
 {
     for (int plane = 0; plane < 4; plane++)
     {
         initCubbies(plane);
+    }
+}
+
+void Boggle::run()
+{
+    int inCubeCount = 0;
+
+    while(std::getline(cubeFile, loadedCube))
+    {
+        // start at the beginning of the file for each "cube"
+        wordFile.clear();
+        wordFile.seekg(0, ios::beg);
+
+        while (std::getline(wordFile, word))
+        {
+            bool found = findWord();
+            if (found)
+            {
+                inCubeCount++;
+            }
+
+            //cout << (found?"true  ":"false ") << word << endl;
+        }
+
+        cout << inCubeCount << endl;
+        inCubeCount = 0;
     }
 }
 
@@ -40,7 +70,7 @@ void Boggle::printPaths()
     {
         cout << "Path ";
 
-        for (int i = 0; i < (*it).size(); i++)
+        for (size_t i = 0; i < (*it).size(); i++)
         {
             cout << (*it)[i] << "(" << word[i] << "), ";
         }
@@ -92,19 +122,17 @@ bool Boggle::findWord()
 bool Boggle::followWordPaths()
 {
     // for each letter in word
-    int wordSize = word.size();
+    size_t wordSize = word.size();
 
-    for (int i = 1; i < wordSize; i++)
+    for (size_t i = 1; i < wordSize; i++)
     {
-        for (vector<Path>::iterator it = paths.begin() ; it != paths.end(); ++it)
-        {
-            if ((*it).size() == i)
-            {
-                // paths could have expanded on us in a previous iteration,
-                // so only call addPaths if current path size is as expected
+        // paths could expand from iteration to iteration, so important to loop
+        // based on size of vector at start of loop
 
-                addPaths((*it), word[i]);
-            }
+        unsigned int pathSize = paths.size();
+        for (unsigned int p = 0; p < pathSize; p++ )
+        {
+            addPaths(paths[p], word[i]);
         }
 
         // remove paths that didn't get added to in for loop (didn't "make the cut")
@@ -165,7 +193,7 @@ bool Boggle::addPaths(Path &p, char c)
     return (!firstTime);  // will return true if we added to atleast one word
 }
 
-void Boggle::removePathsShorterThan(int length)
+void Boggle::removePathsShorterThan(unsigned int length)
 {
     for (vector<Path>::iterator it = paths.begin() ; it != paths.end(); )
     {

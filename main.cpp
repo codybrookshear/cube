@@ -1,9 +1,11 @@
 #include <iostream>
+#include <time.h>
 #include "boggle.h"
 using namespace std;
 
 int main(int argc, char* argv[])
 {
+    clock_t startTime = clock();
 
     if (argc != 3)
     {
@@ -12,18 +14,12 @@ int main(int argc, char* argv[])
     }
 
     Boggle b(argv[1], argv[2]);
-    //b.printTouchLists();
 
-    std::string cube("eqeffvxnhnalxvqbcaypicpvxtacesqgcyrnrygmmzhvxcvrdsutfwawokdqsyrs");
-    b.setLoadedCube(cube);
+    b.run();
 
-    std::string word("efvx");
-    b.setWord(word);
-
-    bool found = b.findWord();
-    cout << "found: " << found << endl;
-
-    b.printPaths();
+    cerr << "score X cubes with dimension 4 in "
+         << ((double)(clock() - startTime)/CLOCKS_PER_SEC)
+         << " seconds." << endl;
 
     return 0;
 }
