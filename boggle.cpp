@@ -1,6 +1,7 @@
 #include "boggle.h"
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
@@ -21,13 +22,20 @@ void Boggle::run()
 {
     int inCubeCount = 0;
 
+    std::stringstream ss; // = std::ostringstream{};
+    ss << wordFile.rdbuf();
+
+
     while(std::getline(cubeFile, loadedCube))
     {
         // start at the beginning of the file for each "cube"
-        wordFile.clear();
-        wordFile.seekg(0, ios::beg);
+        //wordFile.clear();
+        //wordFile.seekg(0, ios::beg);
+        ss.clear();
+        ss.seekg(0, ios::beg);
 
-        while (std::getline(wordFile, word))
+        //while (std::getline(wordFile, word))
+        while (ss >> word)
         {
             bool found = findWord();
             if (found)
