@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 
     b.run();
 
-    cerr << "score X cubes with dimension 4 in "
+    cerr << "scored X cubes with dimension 4 in "
          << ((double)(clock() - startTime)/CLOCKS_PER_SEC)
          << " seconds." << endl;
 

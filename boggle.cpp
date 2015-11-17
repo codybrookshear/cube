@@ -132,7 +132,7 @@ bool Boggle::followWordPaths()
         unsigned int pathSize = paths.size();
         for (unsigned int p = 0; p < pathSize; p++ )
         {
-            addPaths(paths[p], word[i]);
+            addPaths(p, word[i]);
         }
 
         // remove paths that didn't get added to in for loop (didn't "make the cut")
@@ -147,14 +147,14 @@ bool Boggle::followWordPaths()
     return false;
 }
 
-bool Boggle::addPaths(Path &p, char c)
+bool Boggle::addPaths(unsigned int p, char c)
 {
     // add any cubies that the last cubie in the path says we can get to and
     // that match character c
 
     bool firstTime = true;
 
-    const TouchList& touchList = cubies[p.back()].getTouchList();
+    const TouchList& touchList = cubies[paths[p].back()].getTouchList();
 
     TouchList::const_iterator it = touchList.begin();
 
@@ -162,7 +162,8 @@ bool Boggle::addPaths(Path &p, char c)
     // touches
     for(; it != touchList.end(); ++it)
     {
-        if ( std::find(p.begin(), p.end(), (*it)) == p.end() )
+        //if ( std::find(p.begin(), p.end(), (*it)) == p.end() )
+        if (getPathPosition(p, (*it)) == -1)
         {
             // the cubie is not already on our path (a single cubie can only be
             // used once on a given path)
@@ -174,7 +175,7 @@ bool Boggle::addPaths(Path &p, char c)
                 if (firstTime)
                 {
                     // first match, so just add cubie to our existing path
-                    p.push_back(*it);
+                    paths[p].push_back(*it);
                     firstTime = false;
                 }
                 else
@@ -182,7 +183,7 @@ bool Boggle::addPaths(Path &p, char c)
                     // we already found one path and added to it. in this case,
                     // we duplicate the existing path and change the last element
                     // and then add it to paths.
-                    Path newPath(p);
+                    Path newPath(paths[p]);
                     newPath[newPath.size()-1] = (*it);
                     paths.push_back(newPath);
                 }
@@ -202,6 +203,18 @@ void Boggle::removePathsShorterThan(unsigned int length)
         else
             ++it;
     }
+}
+
+int Boggle::getPathPosition(unsigned int p, int cubie)
+{
+    Path::size_type pSize = paths[p].size();
+    for (Path::size_type i = 0; i < pSize; i++)
+    {
+        if (paths[p][i] == cubie)
+            return i;
+    }
+
+    return -1;  // returns -1 if not found
 }
 
 void Boggle::initCubbies(int plane)

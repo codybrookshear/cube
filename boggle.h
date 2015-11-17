@@ -35,9 +35,11 @@ private:
 
     bool followWordPaths();
 
-    bool addPaths(Path &p, char c);
+    bool addPaths(unsigned int p, char c);
 
     void removePathsShorterThan(unsigned int length);
+
+    int getPathPosition(unsigned int p, int cubie);
 
     std::ifstream cubeFile;
 
