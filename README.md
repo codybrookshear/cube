@@ -1,4 +1,4 @@
-# cube2
+# cube
 
 The problem stated below originated from otsys.com/problem. Think of
 the problem statement as a set of "requirements".
@@ -6,7 +6,7 @@ the problem statement as a set of "requirements".
 The sample text files (cubes.txt and words.txt) come from the
 same location.
 
-The .pro file and .pro.user file in this directory are auto-generated
+The cube.pro file in this directory are auto-generated
 by the Qt Creator IDE.
 
 All other source files (.cpp and .h) are the work of Cody Brookshear.
@@ -34,7 +34,7 @@ Specifically, if built using the Makefile and using default files,
 invoke as:
 
 ```
-./cube2 cubes.txt words.txt
+./cube cubes.txt words.txt
 ```
 
 cube-file is a file containing a sequence of 64-letter strings, each
@@ -49,6 +49,6 @@ dictionary that appear in that cube.
 The source code can be compiled under Linux by running the command:
 
 ```
-g++ -O3 -o cube2 cubie.cpp cube.cpp main.cpp
+g++ -O3 -o cube cubie.cpp cube.cpp main.cpp
 ```
 
