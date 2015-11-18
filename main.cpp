@@ -1,6 +1,6 @@
 #include <iostream>
 #include <time.h>
-#include "boggle.h"
+#include "cube.h"
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -13,11 +13,11 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    Boggle b(argv[1], argv[2]);
+    Cube cube(argv[1], argv[2]);
 
-    b.run();
+    cube.run();
 
-    cerr << "scored X cubes with dimension 4 in "
+    cerr << "scored cubes in "
          << ((double)(clock() - startTime)/CLOCKS_PER_SEC)
          << " seconds." << endl;
 

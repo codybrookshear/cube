@@ -3,10 +3,14 @@ CONFIG += console
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    boggle.cpp \
-    cubie.cpp
+    cubie.cpp \
+    cube.cpp
 
 HEADERS += \
     boggle.h \
-    cubie.h
+    cubie.h \
+    cube.h
+
+OTHER_FILES += \
+    README.md
 

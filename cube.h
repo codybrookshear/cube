@@ -1,36 +1,21 @@
-#ifndef BOGGLE_H
-#define BOGGLE_H
+#ifndef CUBE_H
+#define CUBE_H
 
 #include <fstream>
 #include "cubie.h"
 
 typedef std::vector<int> Path;
 
-class Boggle
+class Cube
 {
 public:
-    Boggle(char *cubeFile, char *wordFile );
+    Cube(char *cubeFile, char *wordFile );
 
     void run();  // read from files, run the program
 
-    // everything below should probably be private
-    // but keeping public for debugging flexibility from outside class
-
-    void printTouchLists(); // debug
-
-    void printTouchList(int c); // debug
-
-    void printPaths(); // debug
-
-    void setLoadedCube(std::string& cube);
-
-    void setWord(std::string& word);
-
+private:
     bool findWord();
 
-    static const int cubieCnt = 64;
-
-private:
     void initCubbies(int plane);
 
     bool followWordPaths();
@@ -40,6 +25,8 @@ private:
     void removePathsShorterThan(unsigned int length);
 
     int getPathPosition(unsigned int p, int cubie);
+
+    static const int cubieCnt = 64;
 
     std::ifstream cubeFile;
 
@@ -54,4 +41,4 @@ private:
     std::string word;
 };
 
-#endif // BOGGLE_H
+#endif // CUBE_H

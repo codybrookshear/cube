@@ -1,11 +1,11 @@
-#include "boggle.h"
+#include "cube.h"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
 
 using namespace std;
 
-Boggle::Boggle(char *cubeFile, char *wordFile)
+Cube::Cube(char *cubeFile, char *wordFile)
     : cubeFile(cubeFile),
       wordFile(wordFile),
       cubies(),
@@ -18,7 +18,7 @@ Boggle::Boggle(char *cubeFile, char *wordFile)
     }
 }
 
-void Boggle::run()
+void Cube::run()
 {
     int inCubeCount = 0;
 
@@ -29,8 +29,6 @@ void Boggle::run()
     while(std::getline(cubeFile, loadedCube))
     {
         // start at the beginning of the file for each "cube"
-        //wordFile.clear();
-        //wordFile.seekg(0, ios::beg);
         ss.clear();
         ss.seekg(0, ios::beg);
 
@@ -51,52 +49,7 @@ void Boggle::run()
     }
 }
 
-void Boggle::printTouchLists()
-{
-    for (int c = 0; c < cubieCnt; c++)
-    {
-        printTouchList(c);
-    }
-
-    cout << endl;
-}
-
-void Boggle::printTouchList(int c)
-{
-    cout << c << ": ";
-    const TouchList& list = cubies[c].getTouchList();
-
-    for (TouchList::const_iterator it = list.begin() ; it != list.end(); ++it)
-        cout << *it << ", ";
-
-    cout << endl;
-}
-
-void Boggle::printPaths()
-{
-    for (vector<Path>::iterator it = paths.begin() ; it != paths.end(); ++it)
-    {
-        cout << "Path ";
-
-        for (size_t i = 0; i < (*it).size(); i++)
-        {
-            cout << (*it)[i] << "(" << word[i] << "), ";
-        }
-        cout << endl;
-    }
-}
-
-void Boggle::setLoadedCube(string &cube)
-{
-    loadedCube = cube;
-}
-
-void Boggle::setWord(string &word)
-{
-    this->word = word;
-}
-
-bool Boggle::findWord()
+bool Cube::findWord()
 {
     // clear all paths from previous iterations out
     for (vector<Path>::iterator it = paths.begin() ; it != paths.end(); )
@@ -127,7 +80,7 @@ bool Boggle::findWord()
     }
 }
 
-bool Boggle::followWordPaths()
+bool Cube::followWordPaths()
 {
     // for each letter in word
     size_t wordSize = word.size();
@@ -155,7 +108,7 @@ bool Boggle::followWordPaths()
     return false;
 }
 
-bool Boggle::addPaths(unsigned int p, char c)
+bool Cube::addPaths(unsigned int p, char c)
 {
     // add any cubies that the last cubie in the path says we can get to and
     // that match character c
@@ -202,7 +155,7 @@ bool Boggle::addPaths(unsigned int p, char c)
     return (!firstTime);  // will return true if we added to atleast one word
 }
 
-void Boggle::removePathsShorterThan(unsigned int length)
+void Cube::removePathsShorterThan(unsigned int length)
 {
     for (vector<Path>::iterator it = paths.begin() ; it != paths.end(); )
     {
@@ -213,7 +166,7 @@ void Boggle::removePathsShorterThan(unsigned int length)
     }
 }
 
-int Boggle::getPathPosition(unsigned int p, int cubie)
+int Cube::getPathPosition(unsigned int p, int cubie)
 {
     Path::size_type pSize = paths[p].size();
     for (Path::size_type i = 0; i < pSize; i++)
@@ -225,7 +178,7 @@ int Boggle::getPathPosition(unsigned int p, int cubie)
     return -1;  // returns -1 if not found
 }
 
-void Boggle::initCubbies(int plane)
+void Cube::initCubbies(int plane)
 {
     int arr0[] = {1, 4, 5};
     vector<int> v0(arr0, arr0 +3);
