@@ -30,13 +30,6 @@ The program is invoked as follows:
 program cube-file word-file
 ```
 
-Specifically, if built using the Makefile and using default files,
-invoke as:
-
-```
-./cube cubes.txt words.txt
-```
-
 cube-file is a file containing a sequence of 64-letter strings, each
 on a separate line and each representing a cube in the obvious way.
 word-file is a dictionary containing words, each once again on its own
@@ -50,5 +43,12 @@ The source code can be compiled under Linux by running the command:
 
 ```
 g++ -O3 -o cube cubie.cpp cube.cpp main.cpp
+```
+
+Specifically, if executable is named cube, to invoke with the sample
+files, type:
+
+```
+./cube cubes.txt words.txt
 ```
 
