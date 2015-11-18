@@ -12,6 +12,7 @@ Cube::Cube(char *cubeFile, char *wordFile)
       loadedCube(),
       word()
 {
+    // initialize all 64 cubies
     for (int plane = 0; plane < 4; plane++)
     {
         initCubbies(plane);
@@ -22,17 +23,18 @@ void Cube::run()
 {
     int inCubeCount = 0;
 
-    std::stringstream ss; // = std::ostringstream{};
+    // copy the wordFile into memory to make sure we don't waste
+    // time reading from disk repeatedly
+    std::stringstream ss;
     ss << wordFile.rdbuf();
 
 
     while(std::getline(cubeFile, loadedCube))
     {
-        // start at the beginning of the file for each "cube"
+        // start at the beginning of the word file for each "cube"
         ss.clear();
         ss.seekg(0, ios::beg);
 
-        //while (std::getline(wordFile, word))
         while (ss >> word)
         {
             bool found = findWord();
@@ -40,8 +42,6 @@ void Cube::run()
             {
                 inCubeCount++;
             }
-
-            //cout << (found?"true  ":"false ") << word << endl;
         }
 
         cout << inCubeCount << endl;
@@ -123,7 +123,6 @@ bool Cube::addPaths(unsigned int p, char c)
     // touches
     for(; it != touchList.end(); ++it)
     {
-        //if ( std::find(p.begin(), p.end(), (*it)) == p.end() )
         if (getPathPosition(p, (*it)) == -1)
         {
             // the cubie is not already on our path (a single cubie can only be
@@ -180,6 +179,20 @@ int Cube::getPathPosition(unsigned int p, int cubie)
 
 void Cube::initCubbies(int plane)
 {
+    // a note about how this works
+    // a single "plane" is made up of 16 cubies in a 4x4 grid
+    // the overall cube is then 4 planes stacked on top of each other
+    // the top plane (plane at index 0) looks like this:
+    //
+    //  0  1  2  3
+    //  4  5  6  7
+    //  8  9 10 11
+    // 12 13 14 15
+    //
+    // the next plane, underneath the top plane starts with 16, 17, etc.
+    // cubie[0] can touch 1, 4, and 5 on it's own plane, and 0, 1, 4, and 5
+    // on the plane below it.
+
     int arr0[] = {1, 4, 5};
     vector<int> v0(arr0, arr0 +3);
     cubies[0 + (plane * 16)].init(0 + (plane * 16), v0);

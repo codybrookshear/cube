@@ -8,9 +8,6 @@ Cubie::Cubie()
 {
 }
 
-// the simple list we receive is in terms of cubies 0-15 (plane centric)
-// but the cubie is a 0-63 value
-
 void Cubie::init(int cubie, std::vector<int> &simpleList)
 {
     int plane = cubie / 16;
