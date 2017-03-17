@@ -1,15 +1,6 @@
 # cube
 
-The problem stated below originated from otsys.com/problem. Think of
-the problem statement as a set of "requirements".
-
-The sample text files (cubes.txt and words.txt) come from the
-same location.
-
-The cube.pro file in this directory are auto-generated
-by the Qt Creator IDE.
-
-All other source files (.cpp and .h) are the work of Cody Brookshear.
+Problem statement:
 
 Imagine that you have a 4x4x4 cube of letters, with each of the 64
 "cubies" containing a single letter.  You also have a dictionary of
@@ -38,6 +29,13 @@ line.
 The program should output to stdout a sequence of integers, one for
 each cube.  Each integer should be the number of unique words in the
 dictionary that appear in that cube.
+
+Sample text files (cubes.txt and words.txt) are included. 
+
+The cube.pro file in this directory was auto-generated
+by the Qt Creator IDE.
+
+All other source files (.cpp and .h) are the work of Cody Brookshear.
 
 The source code can be compiled under Linux by running the command:
 
