@@ -1,78 +1,30 @@
 #include "puzzle.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-
 Puzzle::Puzzle()
-    : squares(),
-      loadedPuzzle(),
-      word()
+    : cubes(), words()
 {
 
 }
 
-void Puzzle::loadPuzzles(char *puzzleFile)
-{
-
-}
-
-void Puzzle::loadWords(char *wordFile)
-{
-    loadFile(wordFile, wordBuf, &wordBufSize);
-
-    // point first word at start of buffer
-    word = wordBuf;
-
-    printf("%s %d\n", word, wordBufSize);
-}
-
-void Puzzle::loadFile(char *filename, char *buf, long *fsize)
-{
-    // copy the wordFile into memory to make sure we don't waste
-    // time reading from disk repeatedly
-
-    FILE *f = fopen(filename, "rb");
-    fseek(f, 0, SEEK_END);
-    fsize = ftell(f);
-    fseek(f, 0, SEEK_SET);  //same as rewind(f);
-    
-    buf = (char*)malloc(fsize + 1);
-    fread(buf, fsize, 1, f);
-    fclose(f);
-
-    buf[fsize] = 0;
-    
-    // convert all newlines to null chars
-    for (int i = 0; buf[i] != '\0'; i++)
-    {
-        if (buf[i] == '\n')
-            buf[i] = '\0';
-    }
-}
-
-bool Puzzle::getNextPuzzle()
-{
-    return false;
-}
-
-bool Puzzle::getNextWord()
-{
-    return false;
-}
-
-void Puzzle::run(char *PuzzleFile, char *wordFile)
+void Puzzle::run(char *cubesFile, char *wordsFile)
 {
     int inPuzzleCount = 0;
+    char *word;
+    char *cube;
 
-    loadPuzzles(PuzzleFile);
-    loadWords(wordFile);
+    cubes.loadFile(cubesFile);
+    words.loadFile(wordsFile);
 
-    while(getNextPuzzle())
+    for (cube = cubes.getFirst(); cube = cubes.getNext(); cube != 0)
     {
-        while (getNextWord())
+	//printf("%s\n", cube);
+
+	for (word = words.getFirst(); word = words.getNext(); word != 0)
         {
-            bool found = findWord();
+	    //printf("%s\n", word);
+            bool found = findWord(word, cube);
             if (found)
             {
                 inPuzzleCount++;
@@ -84,10 +36,11 @@ void Puzzle::run(char *PuzzleFile, char *wordFile)
     }
 }
 
-bool Puzzle::findWord()
+bool Puzzle::findWord(char* word, char* cube)
 {
+    //printf("paths: %d\n", sizeof(paths));
     // clear all paths from previous iterations out
-    memcpy((void*)paths, (void*)BK, NUM_SQUARES*NUM_SQUARES*sizeof(paths[0]));
+    memset((void*)paths, (int)BK, sizeof(paths));
     pathsCount = 0;
     //for (int i = 0; i < NUM_SQUARES; i++)
     //{
@@ -100,7 +53,7 @@ bool Puzzle::findWord()
     for (int square = 0; square < NUM_SQUARES; square++)
     {
         // find first char in Puzzle matching word[0]
-        if (loadedPuzzle[square] == word[0])
+        if (cube[square] == word[0])
         {
 	    paths[pathsCount][0] = square;
             ++pathsCount;
@@ -113,11 +66,11 @@ bool Puzzle::findWord()
     }
     else
     {
-        return followWordPaths();
+        return followWordPaths(word);
     }
 }
 
-bool Puzzle::followWordPaths()
+bool Puzzle::followWordPaths(char* word)
 {
     // for each letter in word
     size_t wordSize = strlen(word);
@@ -150,14 +103,12 @@ bool Puzzle::addPaths(unsigned int p, char c)
     // that match character c
 
     bool firstTime = true;
-/*
-    const TouchList& touchList = squares[paths[p].back()].getTouchList();
 
-    TouchList::const_iterator it = touchList.begin();
+    const unsigned char* touchList = squares[paths[p]];
 
     // go through the list of all squares that the one at the end of our path
     // touches
-    for(; it != touchList.end(); ++it)
+    for(int i = 0; touchList[i] != BK; ++i)
     {
         if (getPathPosition(p, (*it)) == -1)
         {
@@ -199,6 +150,7 @@ void Puzzle::removePathsShorterThan(unsigned int length)
         else
             ++it;
     }*/
+    for (int i = 0; i < 
 }
 
 int Puzzle::getPathPosition(unsigned int p, int cubie)

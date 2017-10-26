@@ -1,8 +1,7 @@
-#ifndef SQUARE_H
-#define SQUARE_H
+#ifndef PUZZLE_H
+#define PUZZLE_H
 
-#include "cubie.h"
-
+#include "puzzlefile.h"
 
 /*! Main class that processes the Puzzle and word files, maintains
  *  the path structures and outputs the results computed
@@ -10,13 +9,13 @@
 class Puzzle
 {
 public:
-    /*! constructor
-     *  \param PuzzleFile  file containing Puzzle definitions
-     *  \param wordFile  file conttaining words to check for (a "dictionary")
-     */
+
     Puzzle();
 
-    /*! causes the Puzzle and word files to be processed */
+    /*! causes the Puzzle and word files to be processed 
+     *  \param PuzzleFile  file containing Puzzle definitions
+     *  \param wordFile  file conttaining words to check for (a 
+     *	"dictionary")*/
     void run(char *PuzzleFile, char *wordFile);
 
 private:
@@ -24,17 +23,12 @@ private:
      *  match the given word being searched for.
      *  \returns true if the word was found in the Puzzle, false otherwise
      */
-    bool findWord();
-
-    /*! called in constructor, helper method to initialize the cubies array
-     *  \param plane    The plane (0 through 3) to setup cubies for.
-     */
-    void initCubbies(int plane);
+    bool findWord(char* word, char* cube);
 
     /*! traverses each letter in the word (after 1st letter)
      *  \returns true if the word was found in the Puzzle, false otherwise
      */
-    bool followWordPaths();
+    bool followWordPaths(char* word);
 
     /*! add any cubies that the last cubie in the path says we can get to and
      *  that match character c
@@ -59,21 +53,14 @@ private:
      */
     int getPathPosition(unsigned int p, int cubie);
 
-    void loadPuzzles(char *puzzleFile);
-
-    void loadWords(char *wordFile);
-
-    void loadFile(Char *filename);
-
-    bool getNextPuzzle();
-
-    bool getNextWord();
 
     /*! number of cubies in the Puzzle. every line in a Puzzle file is this long */
     static const int NUM_SQUARES = 64;
 
     /*! number of planes that make up the puzzle */
     static const int NUM_PLANES = 4;
+
+    static const int NUM_PATHS = 100;
 
     static const unsigned char BK = 0xFF;
 
@@ -90,9 +77,9 @@ private:
     // 12 13 14 15
     //
     // the next plane, underneath the top plane starts with 16, 17, etc.
-    // cubie[0] can touch 1, 4, and 5 on it's own plane, and 0, 1, 4, and 5
+    // square[0] can touch 1, 4, and 5 on it's own plane, and 0, 1, 4, and 5
     // on the plane below it.
-    /*! array of 64 cubies, stores lists of which cubies touch each other */
+    /*! array of 64 squares, stores lists of which squares touch each other */
     unsigned char squares[NUM_SQUARES][MAX_BORDERING] =
     {
 {1, 4, 5, 17, 20, 21, 16, BK, BK, BK, BK, BK, BK, BK, BK, BK, BK, BK, BK, BK, BK, BK, BK, BK, BK }, // 0
@@ -162,17 +149,13 @@ private:
     };
 
     /*! during processing, keeps track of possible paths through the Puzzle */
-    unsigned char paths[NUM_SQUARES][NUM_SQUARES];
-    /*! contains a single 64 character line representing a Puzzle, a read from
-     *  the Puzzle file
-     */
-    char loadedPuzzle[NUM_SQUARES];
-
-    /*! contains a single word the Puzzle is currently being checked for */
-    char *word;
+    unsigned char paths[NUM_PATHS][NUM_SQUARES] = { {BK} };
 
     /*! number of paths currently in use */
     int pathsCount;
+
+    PuzzleFile cubes;
+    PuzzleFile words;
 };
 
-#endif // Puzzle_H
+#endif // PUZZLE_H
