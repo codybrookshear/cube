@@ -17,6 +17,8 @@ Cube::Cube(char *cubeFile, char *wordFile)
     {
         initCubbies(plane);
     }
+
+    //printCubies();
 }
 
 void Cube::run()
@@ -256,5 +258,23 @@ void Cube::initCubbies(int plane)
     int arr15[] = {10, 11, 14};
     vector<int> v15(arr15, arr15 +3);
     cubies[15 + (plane * 16)].init(15 + (plane * 16), v15);
+}
+
+void Cube::printCubies()
+{
+    for (int i = 0; i < cubieCnt; i++)
+    {
+      cout << "{";
+      const TouchList& t = cubies[i].getTouchList();
+      for (int j = 0; j < t.size(); j++)
+      {
+         cout << t[j] << ", ";
+      }
+      for (int j = t.size(); j < 24; j++)
+      {
+         cout << "BK, ";
+      }
+      cout << "BK }, // " << i << endl;
+    }
 }
 

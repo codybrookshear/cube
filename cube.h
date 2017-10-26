@@ -61,6 +61,8 @@ private:
      */
     int getPathPosition(unsigned int p, int cubie);
 
+    void printCubies();
+
     /*! number of cubies in the cube. every line in a cube file is this long */
     static const int cubieCnt = 64;
 
