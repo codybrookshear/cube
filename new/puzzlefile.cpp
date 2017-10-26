@@ -18,12 +18,12 @@ void PuzzleFile::loadFile(char *filename)
     fseek(f, 0, SEEK_SET);  //same as rewind(f);
     
     buf = (char*)malloc(fsize + 1);
-    fread(buf, fsize, 1, f);
+    size_t bytesRead = fread(buf, fsize, 1, f);
     fclose(f);
 
     buf[fsize] = 0;
     
-    //printf("%s\n", buf);
+    printf("%s\n", buf);
 
     // convert all newlines to null chars
     for (int i = 0; buf[i] != '\0'; i++)
@@ -34,6 +34,7 @@ void PuzzleFile::loadFile(char *filename)
 
     line = buf;
 
+    printf("%s\n", line);
     //while (*line)
     //{
     //    printf("%s\n", getNext());

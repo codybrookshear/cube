@@ -19,7 +19,11 @@ void Puzzle::run(char *cubesFile, char *wordsFile)
 
     for (cube = cubes.getFirst(); cube = cubes.getNext(); cube != 0)
     {
-	//printf("%s\n", cube);
+	printf("cube: %s\n", cube);
+	for (int i = 0; i < NUM_SQUARES; i++)
+        {
+            printf("cube[%d]=%c\n", i, cubes.getCurrent()[i]);
+        }
 
 	for (word = words.getFirst(); word = words.getNext(); word != 0)
         {
@@ -38,15 +42,9 @@ void Puzzle::run(char *cubesFile, char *wordsFile)
 
 bool Puzzle::findWord(char* word, char* cube)
 {
-    //printf("paths: %d\n", sizeof(paths));
     // clear all paths from previous iterations out
     memset((void*)paths, (int)BK, sizeof(paths));
     pathsCount = 0;
-    //for (int i = 0; i < NUM_SQUARES; i++)
-    //{
-    //    for (int j = 0; j < NUM_SQUARES; j++)
-    //       paths[i][j] = BK;
-    //}
 
     // add a path for any that matches the first letter of the word
 
@@ -56,7 +54,9 @@ bool Puzzle::findWord(char* word, char* cube)
         if (cube[square] == word[0])
         {
 	    paths[pathsCount][0] = square;
-            ++pathsCount;
+            
+            printf("set paths[%d][0]=%d, contains %c in %s\n", pathsCount, square, word[0], word);
+	    ++pathsCount;
         }
     }
 
@@ -104,13 +104,13 @@ bool Puzzle::addPaths(unsigned int p, char c)
 
     bool firstTime = true;
 
-    const unsigned char* touchList = squares[paths[p]];
+    //const unsigned char* touchList = squares[paths[p]];
 
     // go through the list of all squares that the one at the end of our path
     // touches
-    for(int i = 0; touchList[i] != BK; ++i)
-    {
-        if (getPathPosition(p, (*it)) == -1)
+    //for(int i = 0; touchList[i] != BK; ++i)
+    //{
+        /*if (getPathPosition(p, (*it)) == -1)
         {
             // the cubie is not already on our path (a single cubie can only be
             // used once on a given path)
@@ -136,8 +136,7 @@ bool Puzzle::addPaths(unsigned int p, char c)
                 }
             }
         }
-    }
-*/
+    }*/
     return (!firstTime);  // will return true if we added to atleast one word
 }
 
@@ -150,7 +149,7 @@ void Puzzle::removePathsShorterThan(unsigned int length)
         else
             ++it;
     }*/
-    for (int i = 0; i < 
+    //for (int i = 0; i < 
 }
 
 int Puzzle::getPathPosition(unsigned int p, int cubie)

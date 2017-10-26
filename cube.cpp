@@ -67,6 +67,7 @@ bool Cube::findWord()
         if (loadedCube[i] == word[0])
         {
             Path temp;
+            cout << "loadedCube[" << i << "]=" << word[0] << endl;
             temp.push_back(i);
             paths.push_back(temp);
         }
