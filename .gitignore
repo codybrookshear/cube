@@ -1,3 +1,7 @@
-cube
-new/cube
-
+cube.VC.VC.opendb
+cube.VC.db
+cube.exe
+cube.vcxproj.filters
+cube.vcxproj.user
+x64/
+.vs/
