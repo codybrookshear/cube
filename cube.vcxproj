@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6DA694AE-D4B4-47E0-AF63-1E29DC1F9460}</ProjectGuid>
+    <ProjectGuid>{22A85970-87BF-492E-9CF9-11B481434CED}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>cube</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -142,17 +142,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cube.cpp" />
-    <ClCompile Include="cubie.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PathManager.cpp" />
+    <ClCompile Include="puzzle.cpp" />
+    <ClCompile Include="puzzlefile.cpp" />
+    <ClCompile Include="PuzzleModel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cube.h" />
-    <ClInclude Include="cubie.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="cubes.txt" />
-    <Text Include="words.txt" />
+    <ClInclude Include="PathManager.h" />
+    <ClInclude Include="puzzle.h" />
+    <ClInclude Include="puzzlefile.h" />
+    <ClInclude Include="PuzzleModel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

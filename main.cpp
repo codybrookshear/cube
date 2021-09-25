@@ -1,7 +1,6 @@
-#include <iostream>
+#include "stdio.h"
 #include <time.h>
-#include "cube.h"
-using namespace std;
+#include "puzzle.h"
 
 int main(int argc, char* argv[])
 {
@@ -9,17 +8,16 @@ int main(int argc, char* argv[])
 
     if (argc != 3)
     {
-        cout << "Usage:" << argv[0] << " <cube file> <dictionary>" << endl;
+        printf("Usage: %s <cube-file> <dictionary-file>\n", argv[0]);
         return 0;
     }
 
-    Cube cube(argv[1], argv[2]);
+    Puzzle p;
 
-    cube.run();
+    p.run(argv[1], argv[2]);
 
-    cerr << "scored cubes in "
-         << ((double)(clock() - startTime)/CLOCKS_PER_SEC)
-         << " seconds." << endl;
+    fprintf(stderr, "scored cubes in %f seconds.\n",
+          ((double)(clock() - startTime)/CLOCKS_PER_SEC));
 
     return 0;
 }
